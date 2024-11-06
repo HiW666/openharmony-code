@@ -1,0 +1,12 @@
+static_library("oled_demo") {
+    sources = [
+        "oled_demo.c", "oled_ssd1306.c"
+        # "oled_demo_chinese.c", "oled_ssd1306.c"
+    ]
+
+    include_dirs = [
+        "//utils/native/lite/include",
+        "//kernel/liteos_m/kal",
+        "//base/iot_hardware/peripheral/interfaces/kits",
+    ]
+}

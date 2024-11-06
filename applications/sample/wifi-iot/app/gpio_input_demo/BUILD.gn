@@ -1,0 +1,14 @@
+# 静态库
+static_library("gpio_input_demo") {
+    sources = [
+        "gpio_input_get.c"
+        # "gpio_input_int.c"
+        # "gpio_input_int_lpc.c"
+    ]
+
+    include_dirs = [
+        "//utils/native/lite/include",
+        "//kernel/liteos_m/kal/cmsis",
+        "//base/iot_hardware/peripheral/interfaces/kits",
+    ]
+}

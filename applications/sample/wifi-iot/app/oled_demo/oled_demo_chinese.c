@@ -1,0 +1,192 @@
+#include <stdio.h>          // 标准输入输出
+#include <unistd.h>         // POSIX标准接口
+
+#include "ohos_init.h"      // 用于初始化服务(services)和功能(features)
+#include "cmsis_os2.h"      // CMSIS-RTOS API V2
+
+#include "iot_gpio.h"       // OpenHarmony HAL：IoT硬件设备操作接口-GPIO
+#include "hi_io.h"          // 海思 Pegasus SDK：IoT硬件设备操作接口-IO
+#include "hi_adc.h"         // 海思 Pegasus SDK：IoT硬件设备操作接口-ADC
+
+#include "oled_ssd1306.h"   // OLED显示屏简化版驱动接口文件
+
+// 定义一个宏，用于标识ADC2通道
+#define ANALOG_KEY_CHAN_NAME HI_ADC_CHANNEL_2
+
+// 使用PCtoLCD建立字库
+// 字符集：万 物 互 联
+// 字符轮廓：16 X 16，新宋体
+// 每个字32个字节（16*16/8=32）
+// 根据取模方式，每个字的前16字节是汉字的上半部分，后16字节是汉字的下半部分
+// 使用二维数组
+uint8_t fonts1[][32] = {
+    {0x04, 0x04, 0x04, 0x04, 0x04, 0xFC, 0x44, 0x44, 0x44, 0x44, 0x44, 0xC4, 0x04, 0x04, 0x04, 0x00, 0x80, 0x40, 0x20, 0x18, 0x06, 0x01, 0x00, 0x00, 0x40, 0x80, 0x40, 0x3F, 0x00, 0x00, 0x00, 0x00}, /*"万",0*/
+    {0x40, 0x3C, 0x10, 0xFF, 0x10, 0x10, 0x20, 0x10, 0x8F, 0x78, 0x08, 0xF8, 0x08, 0xF8, 0x00, 0x00, 0x02, 0x06, 0x02, 0xFF, 0x01, 0x01, 0x04, 0x42, 0x21, 0x18, 0x46, 0x81, 0x40, 0x3F, 0x00, 0x00}, /*"物",1*/
+    {0x00, 0x02, 0x02, 0x02, 0xE2, 0x3E, 0x22, 0x22, 0x22, 0x22, 0x22, 0xE2, 0x02, 0x02, 0x00, 0x00, 0x40, 0x40, 0x40, 0x47, 0x44, 0x44, 0x44, 0x44, 0x44, 0x74, 0x4E, 0x41, 0x40, 0x40, 0x40, 0x00}, /*"互",2*/
+    {0x02, 0xFE, 0x92, 0x92, 0xFE, 0x02, 0x00, 0x10, 0x11, 0x16, 0xF0, 0x14, 0x13, 0x10, 0x00, 0x00, 0x10, 0x1F, 0x08, 0x08, 0xFF, 0x04, 0x81, 0x41, 0x31, 0x0D, 0x03, 0x0D, 0x31, 0x41, 0x81, 0x00}, /*"联",3*/
+};
+
+// 使用在线取模工具（https://www.23bei.com/tool-965.html）建立字库
+// 字符集：万 物 互 联 电 压
+// 字符轮廓：16 X 16，宋体
+// 每个字32个字节（16*16/8=32）
+// 根据取模方式，每个字的前16字节是汉字的上半部分，后16字节是汉字的下半部分
+// 使用一维数组
+uint8_t fonts2[] = {
+    /* [字库]：[宋体] [数据排列]:从左到右从上到下 [取模方式]:纵向8点下高位 [正负反色]:否 [去掉重复后]共6个字符
+       [总字符库]："万物互联电压"*/
+
+    /*-- ID:0,字符:"万",ASCII编码:CDF2,对应字:宽x高=16x16,画布:宽W=16 高H=16,共32字节*/
+    0x04, 0x04, 0x04, 0x04, 0x04, 0x04, 0xFC, 0x44, 0x44, 0x44, 0x44, 0xE4, 0x44, 0x06, 0x04, 0x00,
+    0x00, 0x80, 0x40, 0x20, 0x10, 0x0E, 0x01, 0x00, 0x40, 0x80, 0x40, 0x3F, 0x00, 0x00, 0x00, 0x00,
+
+    /*-- ID:1,字符:"物",ASCII编码:CEEF,对应字:宽x高=16x16,画布:宽W=16 高H=16,共32字节*/
+    0x40, 0x3C, 0x10, 0xFF, 0x90, 0xA0, 0x10, 0x1F, 0xF0, 0x10, 0xF0, 0x10, 0x10, 0xF8, 0x10, 0x00,
+    0x02, 0x02, 0x01, 0xFF, 0x00, 0x10, 0x0C, 0x43, 0x30, 0x0E, 0x41, 0x80, 0x40, 0x3F, 0x00, 0x00,
+
+    /*-- ID:2,字符:"互",ASCII编码:BBA5,对应字:宽x高=16x16,画布:宽W=16 高H=16,共32字节*/
+    0x00, 0x02, 0x02, 0x02, 0xFE, 0x12, 0x12, 0x12, 0x12, 0x12, 0xFA, 0x12, 0x03, 0x02, 0x00, 0x00,
+    0x40, 0x40, 0x40, 0x46, 0x45, 0x44, 0x44, 0x44, 0x44, 0x44, 0x7F, 0x40, 0x40, 0x60, 0x40, 0x00,
+
+    /*-- ID:3,字符:"联",ASCII编码:C1AA,对应字:宽x高=16x16,画布:宽W=16 高H=16,共32字节*/
+    0x02, 0x02, 0xFE, 0x12, 0x12, 0xFE, 0x02, 0x11, 0x12, 0x16, 0xF0, 0x14, 0x12, 0x93, 0x00, 0x00,
+    0x20, 0x20, 0x3F, 0x11, 0x11, 0xFF, 0x91, 0x41, 0x21, 0x19, 0x07, 0x19, 0x61, 0xC1, 0x41, 0x00,
+
+    /*-- ID:4,字符:"电",ASCII编码:B5E7,对应字:宽x高=16x16,画布:宽W=16 高H=16,共32字节*/
+    0x00, 0xF8, 0x48, 0x48, 0x48, 0x48, 0xFF, 0x48, 0x48, 0x48, 0x48, 0xFC, 0x08, 0x00, 0x00, 0x00,
+    0x00, 0x07, 0x02, 0x02, 0x02, 0x02, 0x3F, 0x42, 0x42, 0x42, 0x42, 0x47, 0x40, 0x70, 0x00, 0x00,
+
+    /*-- ID:5,字符:"压",ASCII编码:D1B9,对应字:宽x高=16x16,画布:宽W=16 高H=16,共32字节*/
+    0x00, 0x00, 0xFE, 0x02, 0x82, 0x82, 0x82, 0x82, 0xFE, 0x82, 0x82, 0x82, 0xC3, 0x82, 0x00, 0x00,
+    0x40, 0x30, 0x0F, 0x40, 0x40, 0x40, 0x40, 0x40, 0x7F, 0x40, 0x42, 0x44, 0x4C, 0x60, 0x40, 0x00};
+
+// 将ADC值转换为电压值
+static float ConvertToVoltage(unsigned short data)
+{
+    return (float)data * 1.8 * 4 / 4096;
+}
+
+/// @brief 显示一个汉字（使用PCtoLCD建立的字库）
+/// @param x x坐标，1像素为单位
+/// @param y y坐标，8像素为单位。即页面起始地址
+/// @param idx 汉字在字库中的索引
+void OledShowChinese1(uint8_t x, uint8_t y, uint8_t idx)
+{
+    // 控制循环
+    uint8_t t;
+
+    // 显示汉字的上半部分
+    OledSetPosition(x, y);
+    for (t = 0; t < 16; t++)
+    {
+        WriteData(fonts1[idx][t]);
+    }
+
+    // 显示汉字的下半部分
+    OledSetPosition(x, y + 1);
+    for (t = 16; t < 32; t++)
+    {
+        WriteData(fonts1[idx][t]);
+    }
+}
+
+/// @brief 显示一个汉字（使用 https://www.23bei.com/tool-965.html 建立的字库）
+/// @param x x坐标，1像素为单位
+/// @param y y坐标，8像素为单位。即页面起始地址
+/// @param idx 汉字在字库中的索引
+void OledShowChinese2(uint8_t x, uint8_t y, uint8_t idx)
+{
+    // 控制循环
+    uint8_t t;
+
+    // 显示汉字的上半部分
+    OledSetPosition(x, y);
+    for (t = 0; t < 16; t++)
+    {
+        WriteData(fonts2[32 * idx + t]);
+    }
+
+    // 显示汉字的下半部分
+    OledSetPosition(x, y + 1);
+    for (t = 16; t < 32; t++)
+    {
+        WriteData(fonts2[32 * idx + t]);
+    }
+}
+
+// 主线程函数
+static void OledTask(void *arg)
+{
+    (void)arg;
+
+    // 初始化SSD1306显示屏驱动芯片
+    OledInit();
+
+    // 全屏填充黑色
+    OledFillScreen(0x00);
+
+    // 居中显示"万物互联"
+    // 起始x坐标 = (屏幕宽度128 - (汉字间距18*(字数-1) + 每个汉字的宽度16 - 第一个汉字的坐标0))/2 = 29
+    OledShowChinese1(29 + 0, 3, 0);  //万
+    OledShowChinese1(29 + 18, 3, 1); //物
+    OledShowChinese2(29 + 36, 3, 2); //互
+    OledShowChinese2(29 + 54, 3, 3); //联
+
+    // 居中显示"OpenHarmony"
+    // 起始x坐标 = (屏幕宽度128 - 字符间距8 * 字母个数11)/2 = 20
+    OledShowString(20, 5, "OpenHarmony", FONT8x16);
+
+    // 左上角显示倒计时
+    char digits[] = "321";
+    for (int i = 0; i < 3; i++)
+    {
+        OledShowChar(0, 0, digits[i], FONT6x8);
+        sleep(1);
+    }
+
+    // 中英文混杂显示
+    OledFillScreen(0x00);       // 全屏填充黑色
+    OledShowChinese2(0, 0, 4);  // 电
+    OledShowChinese2(18, 0, 5); // 压
+    // 工作循环
+    while (1)
+    {
+        // 要显示的字符串
+        static char text[128] = {0};
+        // 用于存放ADC2通道的值
+        unsigned short data = 0;
+        // 读取ADC2通道的值
+        hi_adc_read(ANALOG_KEY_CHAN_NAME, &data, HI_ADC_EQU_MODEL_4, HI_ADC_CUR_BAIS_DEFAULT, 0);
+        // 转换为电压值
+        float voltage = ConvertToVoltage(data);
+        // 格式化字符串
+        snprintf(text, sizeof(text), "%.3f", voltage);
+        // 在中文后面显示字符串
+        OledShowString(36, 0, text, FONT8x16);
+        // 等待30ms
+        usleep(30 * 1000);
+    }
+}
+
+// 入口函数
+static void OledDemo(void)
+{
+    // 定义线程属性
+    osThreadAttr_t attr;
+    attr.name = "OledTask";
+    attr.attr_bits = 0U;
+    attr.cb_mem = NULL;
+    attr.cb_size = 0U;
+    attr.stack_mem = NULL;
+    attr.stack_size = 4096;
+    attr.priority = osPriorityNormal;
+
+    // 创建线程
+    if (osThreadNew(OledTask, NULL, &attr) == NULL)
+    {
+        printf("[OledDemo] Falied to create OledTask!\n");
+    }
+}
+
+// 运行入口函数
+APP_FEATURE_INIT(OledDemo);

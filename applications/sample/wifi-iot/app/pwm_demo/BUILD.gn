@@ -1,0 +1,16 @@
+# 静态库
+static_library("pwm_demo") {
+    sources = [
+        # "pwm_buz.c"
+        # "pwm_music.c"
+        # "pwm_volume.c"
+        # "traffic_light.c"
+        "pwm_led.c"
+    ]
+
+    include_dirs = [
+        "//utils/native/lite/include",
+        "//kernel/liteos_m/kal",
+        "//base/iot_hardware/peripheral/interfaces/kits",
+    ]
+}

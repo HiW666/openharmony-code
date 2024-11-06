@@ -1,0 +1,16 @@
+static_library("net_demo") {  # 注意：目标名称与案例根目录不同了
+  sources = [
+    # 根据功能划分文件
+    "demo_entry_cmsis.c",     # 入口和主线程 源文件
+    "tcp_server_test.c",      # TCP服务端测试 源文件
+  ]
+
+  include_dirs = [
+    "//utils/native/lite/include",
+    "//kernel/liteos_m/kal/cmsis",
+    "//base/iot_hardware/peripheral/interfaces/kits",
+    "//foundation/communication/wifi_lite/interfaces/wifiservice",    # HAL接口中的WiFi接口
+    "../ssd1306_3rd_driver/ssd1306",                                  # OLED驱动模块接口
+    "../easy_wifi/src",                                               # EasyWiFi模块接口
+  ]
+}

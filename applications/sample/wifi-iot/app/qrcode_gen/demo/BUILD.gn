@@ -1,0 +1,12 @@
+static_library("qrcode_demo") {
+  sources = [
+    "demo.c",
+  ]
+
+  include_dirs = [
+    "//utils/native/lite/include",
+    "//kernel/liteos_m/kal/cmsis",
+    "//applications/sample/wifi-iot/app/qrcode_gen/src",              # 二维码生成器模块头文件所在目录
+    "//applications/sample/wifi-iot/app/ssd1306_3rd_driver/ssd1306",  # OLED驱动模块头文件所在目录
+  ]
+}

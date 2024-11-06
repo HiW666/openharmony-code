@@ -1,0 +1,314 @@
+# Copyright (c) 2022, Dragon. HeBei University. email:dragon@hbu.edu.cn
+#
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the following conditions are met:
+#
+# 1. Redistributions of source code must retain the above copyright notice, this
+#    list of conditions and the following disclaimer.
+#
+# 2. Redistributions in binary form must reproduce the above copyright notice,
+#    this list of conditions and the following disclaimer in the documentation
+#    and/or other materials provided with the distribution.
+#
+# 3. Neither the name of the copyright holder nor the names of its
+#    contributors may be used to endorse or promote products derived from
+#    this software without specific prior written permission.
+#
+# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+# AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+# DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+# FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+# DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+# SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+# CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+# OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+# OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+import("//build/lite/config/component/lite_component.gni")
+
+# for "Hello World" example.
+lite_component("app") {
+    # features字段指定业务模块，使目标模块参与编译。
+    features = [
+        # 在features字段中增加索引，包括路径和目标。
+        # 路径"startup"："applications\sample\wifi-iot\app\startup"目录
+        # 目标"hello_world"："applications\sample\wifi-iot\app\startup\BUILD.gn"中的静态库名称
+        "startup:hello_world",
+        # 如果"applications\sample\wifi-iot\app\startup\BUILD.gn"中的静态库名称与所在目录"startup"同名,
+        # 即目标与路径同名，可以简写为：
+        # "startup",
+    ]
+}
+
+# for "gn_practice" example.
+# lite_component("app") {
+#   features = [
+#     "gn_practice/application:my_app",   # 应用程序模块
+#     "gn_practice/driver:my_driver",     # 驱动模块
+#     "gn_practice/library:my_library",   # 库模块
+#   ]
+# }
+
+# for "kvstore_demo" example.
+# lite_component("app") {
+#     features = [
+#         "kvstore_demo",
+#     ]
+# }
+
+# for "file_demo" example.
+# lite_component("app") {
+#     features = [
+#         "file_demo",
+#     ]
+# }
+
+# for "thread_demo" example.
+# lite_component("app") {
+#   features = [
+#     "thread_demo",
+#   ]
+# }
+
+# for "delay_demo" example.
+# lite_component("app") {
+#   features = [
+#     "delay_demo",
+#   ]
+# }
+
+# for "timer_demo" example.
+# lite_component("app") {
+#   features = [
+#     "timer_demo",
+#   ]
+# }
+
+# for "mutex_demo" example.
+# lite_component("app") {
+#   features = [
+#     "mutex_demo",
+#   ]
+# }
+
+# for "semaphore_demo" example.
+# lite_component("app") {
+#   features = [
+#     "semaphore_demo",
+#   ]
+# }
+
+# for "message_demo" example.
+# lite_component("app") {
+#   features = [
+#     "message_demo",
+#   ]
+# }
+
+# for "led_demo" example.
+# lite_component("app") {
+#   features = [
+#     "led_demo",
+#   ]
+# }
+
+# why not "hello world" and "led_demo" example?
+# lite_component("app") {
+#   features = [
+#     "startup:hello_world",
+#     "led_demo",
+#   ]
+# }
+
+# for "gpio_input_demo" example.
+# lite_component("app") {
+#   features = [
+#     "gpio_input_demo",
+#   ]
+# }
+
+# for "pwm_demo" example.
+# lite_component("app") {
+#   features = [
+#     "pwm_demo",
+#   ]
+# }
+
+# for "adc_demo" example.
+# lite_component("app") {
+#   features = [
+#     "adc_demo",
+#   ]
+# }
+
+# for "i2c_demo" example.
+# lite_component("app") {
+#   features = [
+#     "i2c_demo",
+#   ]
+# }
+
+# for "oled_demo" example.
+# lite_component("app") {
+#   features = [
+#     "oled_demo",
+#   ]
+# }
+
+# for "ssd1306_3rd_driver" example.
+# lite_component("app") {
+#     features = [
+#         "ssd1306_3rd_driver/examples:oled_test",    # 应用程序模块
+#         # "ssd1306_3rd_driver/libm_port:libm_port",
+#         "ssd1306_3rd_driver/ssd1306:oled_ssd1306",  # OLED驱动模块
+#     ]
+# }
+
+# for "qrcode_gen" example.
+# lite_component("app") {
+#     features = [
+#         "qrcode_gen/demo:qrcode_demo",              # 案例程序模块
+#         "qrcode_gen/src:qrcode_gen",                # 二维码生成器模块
+#         "ssd1306_3rd_driver/ssd1306:oled_ssd1306",  # OLED驱动模块
+#     ]
+# }
+
+# for "wifi_demo" example.
+# lite_component("app") {
+#   features = [
+#     "wifi_demo",
+#   ]
+# }
+
+# for "easy_wifi" example.
+# lite_component("app") {
+#     features = [
+#         "easy_wifi/demo:wifi_demo",
+#         "easy_wifi/src:easy_wifi",              # easy wifi模块
+#     ]
+# }
+
+# for "tcpclient" example.
+# lite_component("app") {
+#   features = [
+#     "tcpclient:net_demo",                       # 案例程序模块
+#     "ssd1306_3rd_driver/ssd1306:oled_ssd1306",  # OLED驱动模块
+#     "easy_wifi/src:easy_wifi",                  # easy wifi模块
+#   ]
+# }
+
+# for "tcpserver" example.
+# lite_component("app") {
+#   features = [
+#     "tcpserver:net_demo",                       # 案例程序模块
+#     "ssd1306_3rd_driver/ssd1306:oled_ssd1306",  # OLED驱动模块
+#     "easy_wifi/src:easy_wifi",                  # easy wifi模块
+#   ]
+# }
+
+# for "udpclient" example.
+# lite_component("app") {
+#   features = [
+#     "udpclient:net_demo",                       # 案例程序模块
+#     "ssd1306_3rd_driver/ssd1306:oled_ssd1306",  # OLED驱动模块
+#     "easy_wifi/src:easy_wifi",                  # easy wifi模块
+#   ]
+# }
+
+# for "udpserver" example.
+# lite_component("app") {
+#   features = [
+#     "udpserver:net_demo",                       # 案例程序模块
+#     "ssd1306_3rd_driver/ssd1306:oled_ssd1306",  # OLED驱动模块
+#     "easy_wifi/src:easy_wifi",                  # easy wifi模块
+#   ]
+# }
+
+# for "paho_mqtt" example.
+# lite_component("app") {
+#   features = [
+#     "paho_mqtt/MQTTClient-C:paho-mqttclient",   # MQTTClient-C模块和它的示例程序
+#     "paho_mqtt/MQTTPacket:paho-mqttpacket"      # MQTTPacket模块
+#   ]
+# }
+
+# for "mqtt_demo" example.
+# lite_component("app") {
+#   features = [
+#     "mqtt_demo",                                        # 案例程序模块
+#     "paho_mqtt/MQTTPacket:paho-mqttpacket",             # MQTTPacket模块
+#     "paho_mqtt/MQTTClient-C/src:paho-embed-mqtt3cc",    # MQTTClient-C模块
+#     "easy_wifi/src:easy_wifi",                          # easy wifi模块
+#   ]
+# }
+
+# for "mqtt_light" example.
+# lite_component("app") {
+#   features = [
+#     "mqtt_light",                                       # 案例程序模块
+#     "paho_mqtt/MQTTPacket:paho-mqttpacket",             # MQTTPacket模块
+#     "paho_mqtt/MQTTClient-C/src:paho-embed-mqtt3cc",    # MQTTClient-C模块
+#     "easy_wifi/src:easy_wifi",                          # easy wifi模块
+#   ]
+# }
+
+# for "mqtt_light_sensor" example.
+# lite_component("app") {
+#   features = [
+#     "mqtt_light_sensor",                                # 案例程序模块
+#     "paho_mqtt/MQTTPacket:paho-mqttpacket",             # MQTTPacket模块
+#     "paho_mqtt/MQTTClient-C/src:paho-embed-mqtt3cc",    # MQTTClient-C模块
+#     "easy_wifi/src:easy_wifi",                          # easy wifi模块
+#   ]
+# }
+
+# for "mqtt_human_sensor" example.
+# lite_component("app") {
+#   features = [
+#     "mqtt_human_sensor",                                # 案例程序模块
+#     "paho_mqtt/MQTTPacket:paho-mqttpacket",             # MQTTPacket模块
+#     "paho_mqtt/MQTTClient-C/src:paho-embed-mqtt3cc",    # MQTTClient-C模块
+#     "easy_wifi/src:easy_wifi",                          # easy wifi模块
+#   ]
+# }
+
+# for "mqtt_gas_sensor" example.
+# lite_component("app") {
+#   features = [
+#     "mqtt_gas_sensor",                                  # 案例程序模块
+#     "paho_mqtt/MQTTPacket:paho-mqttpacket",             # MQTTPacket模块
+#     "paho_mqtt/MQTTClient-C/src:paho-embed-mqtt3cc",    # MQTTClient-C模块
+#     "easy_wifi/src:easy_wifi",                          # easy wifi模块
+#   ]
+# }
+
+# for "mqtt_temp-humi_sensor" example.
+# lite_component("app") {
+#   features = [
+#     "mqtt_temp-humi_sensor",                            # 案例程序模块
+#     "paho_mqtt/MQTTPacket:paho-mqttpacket",             # MQTTPacket模块
+#     "paho_mqtt/MQTTClient-C/src:paho-embed-mqtt3cc",    # MQTTClient-C模块
+#     "easy_wifi/src:easy_wifi",                          # easy wifi模块
+#   ]
+# }
+
+# for "mqtt_oled" example.
+# lite_component("app") {
+#   features = [
+#     "mqtt_oled",                                        # 案例程序模块
+#     "paho_mqtt/MQTTPacket:paho-mqttpacket",             # MQTTPacket模块
+#     "paho_mqtt/MQTTClient-C/src:paho-embed-mqtt3cc",    # MQTTClient-C模块
+#     "ssd1306_3rd_driver/ssd1306:oled_ssd1306",          # OLED驱动模块
+#     "easy_wifi/src:easy_wifi",                          # easy wifi模块
+#   ]
+# }
+
+# for "astronauts_game" example.
+# lite_component("app") {
+#     features = [
+#         "astronauts_game/game",
+#         # "astronauts_game/common/hals",
+#     ]
+#     deps = [ "astronauts_game/common/hals" ]
+# }

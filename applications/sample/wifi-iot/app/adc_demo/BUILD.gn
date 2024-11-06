@@ -1,0 +1,20 @@
+static_library("adc_demo") {
+    sources = [
+        "light_sensor.c",
+        # "human_sensor.c",
+        # "night_light.c",
+        ## "rgb_light.c",
+        # "voltage_buttons_thread.c",
+        # "voltage_buttons_timer.c",
+        # "voltage_buttons_int.c",
+        # "voltage_buttons_int_queue.c",
+        # "gas_sensor.c",
+        # "gas_alarm.c"
+    ]
+
+    include_dirs = [
+        "//utils/native/lite/include",
+        "//kernel/liteos_m/kal",
+        "//base/iot_hardware/peripheral/interfaces/kits",
+    ]
+}

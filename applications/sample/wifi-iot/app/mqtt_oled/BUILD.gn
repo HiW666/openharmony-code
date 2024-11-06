@@ -1,0 +1,33 @@
+static_library("mqtt_oled") {
+  # 设置编译选项，指定以下编译警告不当做错误处理
+  cflags = [
+    "-Wno-sign-compare",                      # 有符号数和无符号数对比
+    "-Wno-unused-parameter",                  # 未使用的参数
+  ]
+
+  # Paho-MQTT相关宏定义
+  defines = [
+    "MQTT_TASK",                              # 使用线程方式
+    "MQTTCLIENT_PLATFORM_HEADER=mqtt_ohos.h", # 指定OHOS(LiteOS)适配接口文件
+    "CMSIS",                                  # 使用CMSIS库
+  ]
+
+  # 指定要编译的程序文件
+  sources = [
+    "demo_entry.c",                           # 主程序文件
+    "mqtt_task.c",                            # MQTT接口文件 (对MQTTClient-C库二次封装)
+  ]
+
+  # 设置头文件路径
+  include_dirs = [
+    "//utils/native/lite/include",
+    "//kernel/liteos_m/kal/cmsis",
+    "//base/iot_hardware/peripheral/interfaces/kits",
+    "//applications/sample/wifi-iot/app/paho_mqtt/MQTTClient-C/src",        # MQTTClient-C模块接口
+    "//applications/sample/wifi-iot/app/paho_mqtt/MQTTClient-C/src/ohos",   # MQTTClient-C模块接口
+    "//applications/sample/wifi-iot/app/paho_mqtt/MQTTPacket/src",          # MQTTPacket模块接口
+    "//foundation/communication/wifi_lite/interfaces/wifiservice",          # HAL接口中的WiFi接口
+    "../easy_wifi/src",                                                     # EasyWiFi模块接口
+    "../ssd1306_3rd_driver/ssd1306",                                        # OLED驱动模块接口
+  ]
+}

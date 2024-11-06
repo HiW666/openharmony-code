@@ -1,0 +1,14 @@
+static_library("semaphore_demo") {
+  sources = [
+    "semp_basic.c",
+    # "semp.c"
+  ]
+
+  include_dirs = [
+    # include "ohos_init.h",...
+    "//utils/native/lite/include",
+
+    # include CMSIS-RTOS API V2 for OpenHarmony1.0+：
+    "//kernel/liteos_m/kal/cmsis",
+  ]
+}

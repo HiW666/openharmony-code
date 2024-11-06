@@ -1,0 +1,21 @@
+static_library("wifi_demo") {
+    sources = [
+        "wifi_connect_demo.c",
+        # "wifi_hotspot_demo.c",
+    ]
+
+    include_dirs = [
+        "//utils/native/lite/include",
+        "//kernel/liteos_m/kal/cmsis",
+        "//base/iot_hardware/peripheral/interfaces/kits",
+
+        # EasyWiFi模块头文件所在目录
+        "//applications/sample/wifi-iot/app/easy_wifi/src",
+
+        # HAL接口中的WiFi接口
+        "//foundation/communication/wifi_lite/interfaces/wifiservice",
+
+        # 海思SDK接口中的lwIP TCP/IP协议栈
+        "//device/hisilicon/hispark_pegasus/sdk_liteos/third_party/lwip_sack/include",
+    ]
+}

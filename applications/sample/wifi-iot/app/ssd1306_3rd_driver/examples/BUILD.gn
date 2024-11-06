@@ -1,0 +1,13 @@
+static_library("oled_test") {
+    sources = [
+        "ssd1306_demo.c",
+        # "ssd1306_tests.c",
+    ]
+
+    include_dirs = [
+        "../ssd1306",   # 其他工程接入的时候，路径略有不同
+        "//utils/native/lite/include",
+        "//kernel/liteos_m/kal/cmsis",
+        "//base/iot_hardware/peripheral/interfaces/kits",
+    ]
+}

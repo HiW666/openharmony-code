@@ -1,0 +1,77 @@
+{
+    "configurations": [
+        {
+            "name": "Win32",
+            "includePath": [
+                "${workspaceFolder}/**",
+                ".",
+                
+                "${workspaceFolder}/utils/native/lite/include",
+
+                "${workspaceFolder}/device/hisilicon/hispark_pegasus/sdk_liteos/platform/os/Huawei_LiteOS/components/lib/libc/musl/include",
+                
+                // --CMSIS-RTOS2接口--
+                "${workspaceFolder}/kernel/liteos_m/kal",
+                "${workspaceFolder}/kernel/liteos_m/kal/cmsis",
+                "${workspaceFolder}/device/hisilicon/hispark_pegasus/sdk_liteos/platform/os/Huawei_LiteOS/components/lib/libc/musl/arch/riscv32",
+
+                // --HAL(硬件抽象层)接口--
+                "${workspaceFolder}/base/iot_hardware/peripheral/interfaces/kits",
+
+                // --海思SDK接口--
+                // OpenHarmony 1.0的海思Pegasus SDK位置
+                // "${workspaceFolder}/vendor/hisi/hi3861/hi3861/include",
+                // OpenHarmony 1.0+的海思Pegasus SDK位置
+                "${workspaceFolder}/device/hisilicon/hispark_pegasus/sdk_liteos/include",
+                
+                // --ssd1306 3rd driver--
+                "${workspaceFolder}/applications/sample/wifi-iot/app/ssd1306_3rd_driver/ssd1306",
+
+                // --qrcode generator--
+                "${workspaceFolder}/applications/sample/wifi-iot/app/qrcode_gen/src",
+
+                // --wifi--
+                // OpenHarmony 1.0
+                // "${workspaceFolder}/foundation/communication/interfaces/kits/wifi_lite/wifiservice",
+                // OpenHarmony 1.0+
+                "${workspaceFolder}/foundation/communication/wifi_lite/interfaces/wifiservice",
+
+                // --EasyWiFi--
+                "${workspaceFolder}/applications/sample/wifi-iot/app/easy_wifi/src",
+
+                // --LwIp--
+                // OpenHarmony 1.0
+                // "${workspaceFolder}/vendor/hisi/hi3861/hi3861/third_party/lwip_sack/include",
+                // OpenHarmony 1.0+
+                "${workspaceFolder}/third_party/bounds_checking_function/include",
+                "${workspaceFolder}/device/hisilicon/hispark_pegasus/sdk_liteos/config",
+                "${workspaceFolder}/device/hisilicon/hispark_pegasus/sdk_liteos/platform/os/Huawei_LiteOS/arch",
+                "${workspaceFolder}/device/hisilicon/hispark_pegasus/sdk_liteos/platform/os/Huawei_LiteOS/kernel/include",
+                "${workspaceFolder}/device/hisilicon/hispark_pegasus/sdk_liteos/platform/os/Huawei_LiteOS/targets/hi3861v100/include",
+                "${workspaceFolder}/device/hisilicon/hispark_pegasus/sdk_liteos/third_party/lwip_sack/include",
+
+                // --Paho-MQTT--
+                "${workspaceFolder}/applications/sample/wifi-iot/app/paho_mqtt/MQTTPacket/src",
+                "${workspaceFolder}/applications/sample/wifi-iot/app/paho_mqtt/MQTTClient-C/src",
+                "${workspaceFolder}/applications/sample/wifi-iot/app/paho_mqtt/MQTTClient-C/src/ohos"
+            ],
+            "browse": {
+                "path": [
+                    "${workspaceFolder}",
+
+                    // --HAL(硬件抽象层)接口--
+                    "${workspaceFolder}/device/hisilicon/hispark_pegasus/hi3861_adapter/hals/iot_hardware/wifiiot_lite",
+                    
+                    "${workspaceFolder}/device/hisilicon/hispark_pegasus/hi3861_adapter/hals/communication/wifi_lite"
+                ],
+                "limitSymbolsToIncludedHeaders": true,
+                "databaseFilename": "symbols.db"
+            },
+            "compilerPath": "",
+            "cStandard": "gnu17",
+            "cppStandard": "gnu++17",
+            "intelliSenseMode": "linux-gcc-x64"
+        }
+    ],
+    "version": 4
+}

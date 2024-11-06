@@ -1,0 +1,12 @@
+static_library("i2c_demo") {
+  sources = [
+    "aht20.c",
+    "temp-humi_sensor.c",
+  ]
+
+  include_dirs = [
+    "//utils/native/lite/include",
+    "//kernel/liteos_m/kal/cmsis",
+    "//base/iot_hardware/peripheral/interfaces/kits",
+  ]
+}
